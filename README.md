@@ -8,15 +8,23 @@ Simple binder design pipeline using AlphaFold2 backpropagation, MPNN, and PyRose
 **Note: Before posting an issue, read the complete wiki <a href="https://github.com/martinpacesa/BindCraft/wiki/De-novo-binder-design-with-BindCraft">here</a>. Issues that are covered in the wiki will be closed without an answer.**
 
 ## Installation
-First you need to clone this repository. Replace **[install_folder]** with the path where you want to install it.
+clone this repo
 
-`git clone https://github.com/martinpacesa/BindCraft [install_folder]`
+`git clone https://github.com/ullahsamee/BindCraft [install_folder]`
 
-The navigate into your install folder using *cd* and run the installation code. BindCraft requires a CUDA-compatible Nvidia graphics card to run. In the *cuda* setting, please specify the CUDA version compatible with your graphics card, for example '11.8'. If unsure, leave blank but it's possible that the installation might select the wrong version, which will lead to errors. In *pkg_manager* specify whether you are using 'mamba' or 'conda', if left blank it will use 'conda' by default. 
+`cd BindCraft`
 
-Note: This install script will install PyRosetta, which requires a license for commercial purposes. The code requires about 2 Mb of storage space, while the AlphaFold2 weights take up about 5.3 Gb.
+`chmod +x install_bindcraft.sh`
 
-`bash install_bindcraft.sh --cuda '12.4' --pkg_manager 'conda'`
+`./install_bindcraft.sh`
+
+The script will activate the env for you, but in case if not then use this.
+`source ./activate_bindcraft.sh`
+
+Test your installation
+`python -u ./bindcraft.py --settings './settings_target/PDL1.json' --filters './settings_filters/default_filters.json' --advanced './settings_advanced/default_4stage_multimer.json'`
+
+Note: Using uv `./install_bindcraft.sh` script will setup BindCraft with Python3.12, CUDA 13.0 and jax 0.7.2 and PyRosetta with(Python3.12). PyRosetta, requires a license for commercial purposes. The code requires about 2 Mb of storage space, while the AlphaFold2 weights take up about 5.3 Gb.
 
 ## Google Colab
 <a href="https://colab.research.google.com/github/martinpacesa/BindCraft/blob/main/notebooks/BindCraft.ipynb">
