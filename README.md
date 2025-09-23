@@ -1,12 +1,12 @@
-# uv BindCraft
-![alt text](https://github.com/ullahsamee/BindCraft/blob/main/uii.gif)
-
-Simple binder design pipeline using AlphaFold2 backpropagation, MPNN, and PyRosetta. Select your target and let the script do the rest of the work and finish once you have enough designs to order!
-
+# uv BindCraft 
 [Nature BindCraft](https://www.nature.com/articles/s41586-025-09429-6)
 
-**Note: Before posting an issue, read the complete wiki <a href="https://github.com/martinpacesa/BindCraft/wiki/De-novo-binder-design-with-BindCraft">here</a>. Issues that are covered in the wiki will be closed without an answer.**
+![alt text](https://github.com/ullahsamee/BindCraft/blob/main/uii.gif)
 
+<samp>
+Simple binder design pipeline using AlphaFold2 backpropagation, MPNN, and PyRosetta. Select your target and let the script do the rest of the work and finish once you have enough designs to order!
+<samp>
+  
 ![alt text](https://github.com/ullahsamee/BindCraft/blob/main/ui.png)
 
 ## Installation
@@ -257,6 +257,7 @@ enable_rejection_check          -> enable rejection rate check
 
 ---
 
+**Note: Before posting an issue, read the complete wiki <a href="https://github.com/martinpacesa/BindCraft/wiki/De-novo-binder-design-with-BindCraft">here</a>. Issues that are covered in the wiki will be closed without an answer.**
 
  <samp>
 Thanks to Lennart Nickel, Yehlin Cho, Casper Goverde, and Sergey Ovchinnikov for help with coding and discussing ideas. This repository uses code from: Sergey Ovchinnikov's ColabDesign (https://github.com/sokrypton/ColabDesign), Justas Dauparas's ProteinMPNN (https://github.com/dauparas/ProteinMPNN), and PyRosetta (https://github.com/RosettaCommons/PyRosetta.notebooks)
