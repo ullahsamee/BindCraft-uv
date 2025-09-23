@@ -1,4 +1,4 @@
-# BindCraft
+# uv BindCraft
 ![alt text](https://github.com/ullahsamee/BindCraft/blob/main/uii.gif)
 
 Simple binder design pipeline using AlphaFold2 backpropagation, MPNN, and PyRosetta. Select your target and let the script do the rest of the work and finish once you have enough designs to order!
