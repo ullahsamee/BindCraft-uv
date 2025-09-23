@@ -1,11 +1,13 @@
 # BindCraft
-![alt text](https://github.com/martinpacesa/BindCraft/blob/main/pipeline.png?raw=true)
+![alt text](https://github.com/ullahsamee/BindCraft/blob/main/uii.gif)
 
 Simple binder design pipeline using AlphaFold2 backpropagation, MPNN, and PyRosetta. Select your target and let the script do the rest of the work and finish once you have enough designs to order!
 
-[Preprint link for BindCraft](https://www.biorxiv.org/content/10.1101/2024.09.30.615802)
+[Preprint link for BindCraft](https://www.nature.com/articles/s41586-025-09429-6)
 
 **Note: Before posting an issue, read the complete wiki <a href="https://github.com/martinpacesa/BindCraft/wiki/De-novo-binder-design-with-BindCraft">here</a>. Issues that are covered in the wiki will be closed without an answer.**
+
+![alt text](https://github.com/ullahsamee/BindCraft/blob/main/ui.png)
 
 ## Installation
 clone this repo
