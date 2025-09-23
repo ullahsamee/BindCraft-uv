@@ -12,19 +12,32 @@ Simple binder design pipeline using AlphaFold2 backpropagation, MPNN, and PyRose
 ## Installation
 clone this repo
 
-`git clone https://github.com/ullahsamee/BindCraft`
+```
+git clone https://github.com/ullahsamee/BindCraft
+```
 
-`cd BindCraft`
+```
+cd BindCraft
+```
 
-`chmod +x install_bindcraft.sh`
+```
+chmod +x install_bindcraft.sh
+```
 
-`./install_bindcraft.sh`
+```
+./install_bindcraft.sh
+```
 
 The script will activate the env for you, but in case if not then use this.
-`source ./activate_bindcraft.sh`
+```
+source ./activate_bindcraft.sh
+```
 
 Test your installation
-`python -u ./bindcraft.py --settings './settings_target/PDL1.json' --filters './settings_filters/default_filters.json' --advanced './settings_advanced/default_4stage_multimer.json'`
+```
+python -u ./bindcraft.py --settings './settings_target/PDL1.json' --filters './settings_filters/default_filters.json' --advanced './settings_advanced/default_4stage_multimer.json
+'
+```
 
 Note: Using uv `./install_bindcraft.sh` script will setup BindCraft with Python3.12, CUDA 13.0 and jax 0.7.2 and PyRosetta with(Python3.12). PyRosetta, requires a license for commercial purposes. The code requires about 2 Mb of storage space, while the AlphaFold2 weights take up about 5.3 Gb.
 
