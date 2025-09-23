@@ -45,25 +45,37 @@ Note: Using uv `./install_bindcraft.sh` script will setup BindCraft with Python3
 <a href="https://colab.research.google.com/github/martinpacesa/BindCraft/blob/main/notebooks/BindCraft.ipynb">
   <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
 </a> <br />
+
+ <samp>
 We prepared a convenient google colab notebook to test the bindcraft code functionalities. However, as the pipeline requires significant amount of GPU memory to run for larger target+binder complexes, we highly recommend to run it using a local installation and at least 32 Gb of GPU memory.
+ </samp>
 
 **Always try to trim the input target PDB to the smallest size possible! It will significantly speed up the binder generation and minimise the GPU memory requirements.**
 
 **Be ready to run at least a few hundred trajectories to see some accepted binders, for difficult targets it might even be a few thousand.**
 
 
-## Running the script locally and explanation of settings
-To run the script locally, first you need to configure your target .json file in the *settings_target* folder. In the json file are the following settings:
+#  Running the Script Locally
+To run the script locally, you need to configure your target `.json` file in the **`settings_target`** folder.
 
-```
-design_path         -> path where to save designs and statistics
-binder_name         -> what to prefix your designed binder files with
-starting_pdb        -> the path to the PDB of your target protein
-chains                -> which chains to target in your protein, rest will be ignored
-target_hotspot_residues   -> which position to target for binder design, for example `1,2-10` or chain specific `A1-10,B1-20` or entire chains `A`, set to null if you want AF2 to select binding site; better to select multiple target residues or a small patch to reduce search space for binder
-lengths           -> range of binder lengths to design
-number_of_final_designs   -> how many designs that pass all filters to aim for, script will stop if this many are reached
-```
+| 🏷️ **Parameter** | 📖 **Description** |
+|:------------------|:-------------------|
+| `design_path` | Path where to save designs and statistics |
+| `binder_name` | What to prefix your designed binder files with |
+| `starting_pdb` | The path to the PDB of your target protein |
+| `chains` | Which chains to target in your protein, rest will be ignored |
+| `target_hotspot_residues` | Which position to target for binder design, for example `1,2-10` or chain specific `A1-10,B1-20` or entire chains `A`, set to null if you want AF2 to select binding site; better to select multiple target residues or a small patch to reduce search space for binder |
+| `lengths` | Range of binder lengths to design |
+| `number_of_final_designs` | How many designs that pass all filters to aim for, script will stop if this many are reached |
+
+---
+
+<div align="center">
+
+💡 *Configure these parameters in your JSON file before running the script*
+
+</div>
+
 Then run the binder design script:
 
 `sbatch ./bindcraft.slurm --settings './settings_target/PDL1.json' --filters './settings_filters/default_filters.json' --advanced './settings_advanced/default_4stage_multimer.json'`
@@ -78,7 +90,9 @@ cd /path/to/bindcraft/folder/
 python -u ./bindcraft.py --settings './settings_target/PDL1.json' --filters './settings_filters/default_filters.json' --advanced './settings_advanced/default_4stage_multimer.json'
 ```
 
-**We recommend to generate at least a 100 final designs passing all filters, then order the top 5-20 for experimental characterisation.** If high affinity binders are required, it is better to screen more, as the ipTM metric used for ranking is not a good predictor for affinity, but has been shown to be a good binary predictor of binding. 
+> [!IMPORTANT]
+> We recommend to generate at least a 100 final designs passing all filters, then order the top 5-20 for expression.
+If high affinity binders are required, it is better to screen more, as the ipTM metric used for ranking is not a good predictor for affinity, but has been shown to be a good binary predictor of binding. 
 
 Below are explanations for individual filters and advanced settings.
 
@@ -165,69 +179,86 @@ enable_mpnn = True              -> whether to enable MPNN design
 enable_rejection_check          -> enable rejection rate check
 ```
 
-## Filters
-Here are the features by which your designs will be filtered, if you don't want to use some, just set *null* as threshold. *higher* option indicates whether values higher than threshold should be kept (true) or lower (false). Features starting with N_ correspond to statistics per each AlphaFold model, Averages are accross all models predicted.
-```
-MPNN_score            -> MPNN sequence score, generally not recommended as it depends on protein
-MPNN_seq_recovery       -> MPNN sequence recovery of original trajectory
-pLDDT             -> pLDDT confidence score of AF2 complex prediction, normalised to 0-1
-pTM               -> pTM confidence score of AF2 complex prediction, normalised to 0-1
-i_pTM             -> interface pTM confidence score of AF2 complex prediction, normalised to 0-1
-pAE               -> predicted alignment error of AF2 complex prediction, normalised compared AF2 by n/31 to 0-1
-i_pAE             -> predicted interface alignment error of AF2 complex prediction,  normalised compared AF2 by n/31 to 0-1
-i_pLDDT             -> interface pLDDT confidence score of AF2 complex prediction, normalised to 0-1
-ss_pLDDT            -> secondary structure pLDDT confidence score of AF2 complex prediction, normalised to 0-1
-Unrelaxed_Clashes       -> number of interface clashes before relaxation
-Relaxed_Clashes         -> number of interface clashes after relaxation
-Binder_Energy_Score       -> Rosetta energy score for binder alone
-Surface_Hydrophobicity      -> surface hydrophobicity fraction for binder
-ShapeComplementarity      -> interface shape complementarity
-PackStat            -> interface packstat rosetta score
-dG                -> interface rosetta dG energy
-dSASA             -> interface delta SASA (size)
-dG/dSASA            -> interface energy divided by interface size
-Interface_SASA_%        -> Fraction of binder surface covered by the interface
-Interface_Hydrophobicity        -> Interface hydrophobicity fraction of binder interface
-n_InterfaceResidues       -> number of interface residues
-n_InterfaceHbonds       -> number of hydrogen bonds at the interface
-InterfaceHbondsPercentage   -> number of hydrogen bonds compared to interface size
-n_InterfaceUnsatHbonds      -> number of unsatisfied buried hydrogen bonds at the interface
-InterfaceUnsatHbondsPercentage  -> number of unsatisfied buried hydrogen bonds compared to interface size
-Interface_Helix%        -> proportion of alfa helices at the interface
-Interface_BetaSheet%      -> proportion of beta sheets at the interface
-Interface_Loop%         -> proportion of loops at the interface
-Binder_Helix%         -> proportion of alfa helices in the binder structure
-Binder_BetaSheet%       -> proportion of beta sheets in the binder structure
-Binder_Loop%          -> proportion of loops in the binder structure
-InterfaceAAs          -> number of amino acids of each type at the interface
-HotspotRMSD           -> unaligned RMSD of binder compared to original trajectory, in other words how far is binder in the repredicted complex from the original binding site
-Target_RMSD           -> RMSD of target predicted in context of the designed binder compared to input PDB
-Binder_pLDDT          -> pLDDT confidence score of binder predicted alone
-Binder_pTM            -> pTM confidence score of binder predicted alone
-Binder_pAE            -> predicted alignment error of binder predicted alone
-Binder_RMSD           -> RMSD of binder predicted alone compared to original trajectory
-```
+#  Protein Design Metrics
 
-## Implemented design algorithms
-<ul>
- <li>2stage - design with logits->pssm_semigreedy (faster)</li>
- <li>3stage - design with logits->softmax(logits)->one-hot (standard)</li>
- <li>4stage - design with logits->softmax(logits)->one-hot->pssm_semigreedy (default, extensive)</li>
- <li>greedy - design with random mutations that decrease loss (less memory intensive, slower, less efficient)</li>
- <li>mcmc - design with random mutations that decrease loss, similar to Wicky et al. (less memory intensive, slower, less efficient)</li>
-</ul>
+<div align="center">
 
-## Known limitations
-<ul>
- <li>Settings might not work for all targets! Number of iterations, design weights, and/or filters might have to be adjusted. Target site selection is also important, but AF2 is very good at detecting good binding sites if no hotspot is specified.</li>
- <li>AF2 is worse at predicting/designing hydrophilic then it is at hydrophobic interfaces.</li>
- <li>Sometimes the trajectories can end up being deformed or 'squashed'. This is normal for AF2 multimer design, as it is very sensitive to the sequence input, this cannot be avoided without model retraining. However these trajectories are quickly detected and discarded. </li>
-</ul>
+---
 
-## Credits
-Thanks to Lennart Nickel, Yehlin Cho, Casper Goverde, and Sergey Ovchinnikov for help with coding and discussing ideas. This repository uses code from:
-<ul>
- <li>Sergey Ovchinnikov's ColabDesign (https://github.com/sokrypton/ColabDesign)</li>
- <li>Justas Dauparas's ProteinMPNN (https://github.com/dauparas/ProteinMPNN)</li>
- <li>PyRosetta (https://github.com/RosettaCommons/PyRosetta.notebooks)</li>
-</ul>
+| 📊 **Metric** | 📝 **Description** |
+|:--------------|:------------------|
+| `MPNN_score` | MPNN sequence score, generally not recommended as it depends on protein |
+| `MPNN_seq_recovery` | MPNN sequence recovery of original trajectory |
+| `pLDDT` | pLDDT confidence score of AF2 complex prediction, normalised to 0-1 |
+| `pTM` | pTM confidence score of AF2 complex prediction, normalised to 0-1 |
+| `i_pTM` | Interface pTM confidence score of AF2 complex prediction, normalised to 0-1 |
+| `pAE` | Predicted alignment error of AF2 complex prediction, normalised compared AF2 by n/31 to 0-1 |
+| `i_pAE` | Predicted interface alignment error of AF2 complex prediction, normalised compared AF2 by n/31 to 0-1 |
+| `i_pLDDT` | Interface pLDDT confidence score of AF2 complex prediction, normalised to 0-1 |
+| `ss_pLDDT` | Secondary structure pLDDT confidence score of AF2 complex prediction, normalised to 0-1 |
+| `Unrelaxed_Clashes` | Number of interface clashes before relaxation |
+| `Relaxed_Clashes` | Number of interface clashes after relaxation |
+| `Binder_Energy_Score` | Rosetta energy score for binder alone |
+| `Surface_Hydrophobicity` | Surface hydrophobicity fraction for binder |
+| `ShapeComplementarity` | Interface shape complementarity |
+| `PackStat` | Interface packstat rosetta score |
+| `dG` | Interface rosetta dG energy |
+| `dSASA` | Interface delta SASA (size) |
+| `dG/dSASA` | Interface energy divided by interface size |
+| `Interface_SASA_%` | Fraction of binder surface covered by the interface |
+| `Interface_Hydrophobicity` | Interface hydrophobicity fraction of binder interface |
+| `n_InterfaceResidues` | Number of interface residues |
+| `n_InterfaceHbonds` | Number of hydrogen bonds at the interface |
+| `InterfaceHbondsPercentage` | Number of hydrogen bonds compared to interface size |
+| `n_InterfaceUnsatHbonds` | Number of unsatisfied buried hydrogen bonds at the interface |
+| `InterfaceUnsatHbondsPercentage` | Number of unsatisfied buried hydrogen bonds compared to interface size |
+| `Interface_Helix%` | Proportion of alfa helices at the interface |
+| `Interface_BetaSheet%` | Proportion of beta sheets at the interface |
+| `Interface_Loop%` | Proportion of loops at the interface |
+| `Binder_Helix%` | Proportion of alfa helices in the binder structure |
+| `Binder_BetaSheet%` | Proportion of beta sheets in the binder structure |
+| `Binder_Loop%` | Proportion of loops in the binder structure |
+| `InterfaceAAs` | Number of amino acids of each type at the interface |
+| `HotspotRMSD` | Unaligned RMSD of binder compared to original trajectory, in other words how far is binder in the repredicted complex from the original binding site |
+| `Target_RMSD` | RMSD of target predicted in context of the designed binder compared to input PDB |
+| `Binder_pLDDT` | pLDDT confidence score of binder predicted alone |
+| `Binder_pTM` | pTM confidence score of binder predicted alone |
+| `Binder_pAE` | Predicted alignment error of binder predicted alone |
+| `Binder_RMSD` | RMSD of binder predicted alone compared to original trajectory |
+
+---
+
+<div align="center">
+
+*This table provides a comprehensive overview of metrics used to evaluate protein design quality and binding interactions.*
+
+</div>
+
+##  Implemented Design Algorithms
+
+|  **Algorithm** |  **Description** |
+|:-----------------|:-------------------|
+| `2stage` | Design with logits→pssm_semigreedy (faster) |
+| `3stage` | Design with logits→softmax(logits)→one-hot (standard) |
+| `4stage` | Design with logits→softmax(logits)→one-hot→pssm_semigreedy (default, extensive) |
+| `greedy` | Design with random mutations that decrease loss (less memory intensive, slower, less efficient) |
+| `mcmc` | Design with random mutations that decrease loss, similar to Wicky et al. (less memory intensive, slower, less efficient) |
+
+---
+
+## ⚠️ Known Limitations
+
+**Important considerations when using the design algorithms**
+
+|  **Limitation** |  **Details** |
+|:------------------|:---------------|
+| **Target Specificity** | Settings might not work for all targets! Number of iterations, design weights, and/or filters might have to be adjusted. Target site selection is also important, but AF2 is very good at detecting good binding sites if no hotspot is specified. |
+| **Interface Type Bias** | AF2 is worse at predicting/designing hydrophilic then it is at hydrophobic interfaces. |
+| **Trajectory Deformation** | Sometimes the trajectories can end up being deformed or 'squashed'. This is normal for AF2 multimer design, as it is very sensitive to the sequence input, this cannot be avoided without model retraining. However these trajectories are quickly detected and discarded. |
+
+---
+
+
+ <samp>
+Thanks to Lennart Nickel, Yehlin Cho, Casper Goverde, and Sergey Ovchinnikov for help with coding and discussing ideas. This repository uses code from: Sergey Ovchinnikov's ColabDesign (https://github.com/sokrypton/ColabDesign), Justas Dauparas's ProteinMPNN (https://github.com/dauparas/ProteinMPNN), and PyRosetta (https://github.com/RosettaCommons/PyRosetta.notebooks)
+</samp>
