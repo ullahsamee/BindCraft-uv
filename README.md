@@ -2,7 +2,7 @@
 [Nature BindCraft](https://www.nature.com/articles/s41586-025-09429-6)
 
 <samp>
-Install and setuo BinCraft in seconds using uv an extremely fast Python package manager. Tested on Ubuntu 25.04, running Linux kernel 6.16.9
+Install and setup BindCraft in seconds using uv an extremely fast Python package manager. Tested on Ubuntu 25.04, running Linux kernel 6.16.9
 <samp>
 
 ![alt text](https://github.com/ullahsamee/BindCraft/blob/main/uii.gif)
