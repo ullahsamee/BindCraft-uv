@@ -1,12 +1,11 @@
 # uv BindCraft 
 [Nature BindCraft](https://www.nature.com/articles/s41586-025-09429-6)
 
-![alt text](https://github.com/ullahsamee/BindCraft/blob/main/uii.gif)
+<samp>
+Install and setuo BinCraft in seconds using uv an extremely fast Python package manager. Tested on Ubuntu 25.04, running Linux kernel 6.16.9
+<samp>
 
-<samp>
-Simple binder design pipeline using AlphaFold2 backpropagation, MPNN, and PyRosetta. Select your target and let the script do the rest of the work and finish once you have enough designs to order!
-<samp>
-  
+![alt text](https://github.com/ullahsamee/BindCraft/blob/main/uii.gif)
 
 ## Installation
 clone this repo
