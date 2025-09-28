@@ -13,7 +13,7 @@ Simple binder design pipeline using AlphaFold2 backpropagation, MPNN, and PyRose
 clone this repo
 
 ```
-git clone https://github.com/ullahsamee/BindCraft
+git clone https://github.com/ullahsamee/BindCraft-uv
 ```
 
 ```
